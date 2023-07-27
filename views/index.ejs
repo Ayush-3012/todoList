@@ -1,0 +1,22 @@
+<div class="mainBody">
+  <%- include("partials/header.ejs") %>
+  <div class="todoList">
+    <div class="list">
+      <% if(locals.todoList) { %> <%todoList.forEach((todo)=> { %>
+      <div class="listItem">
+        <input type="checkbox" name="check" id="" class="checkBox" />
+        <p><%=todo %></p>
+      </div>
+      <%}) %> <% }%>
+    </div>
+
+    <div class="todoInput">
+      <form action="/submit" method="post">
+        <input type="text" name="todo" placeholder="Enter your todo" />
+        <input type="submit" value="+" />
+      </form>
+    </div>
+  </div>
+</div>
+
+<%- include("partials/footer.ejs") %>
