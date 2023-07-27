@@ -17,7 +17,7 @@ app.post("/submit", (req, res) => {
     const todo_item = req.body["todo"];
     todoList.push(todo_item);
   }
-  res.render("index.ejs", { todoList: todoList.reverse() });
+  res.render("index.ejs", { todoList: todoList.reverse() });  
 });
 
 app.listen(port, () => {

@@ -5,7 +5,7 @@
       <% if(locals.todoList) { %> <%todoList.forEach((todo)=> { %>
       <div class="listItem">
         <input type="checkbox" name="check" id="" class="checkBox" />
-        <p><%=todo %></p>
+        <p class="lineThrough"><%=todo %></p>
       </div>
       <%}) %> <% }%>
     </div>
@@ -14,9 +14,9 @@
       <form action="/submit" method="post">
         <input type="text" name="todo" placeholder="Enter your todo" />
         <input type="submit" value="+" />
+        <input type="submit" value="-" />
       </form>
     </div>
   </div>
+  <%- include("partials/footer.ejs") %>
 </div>
-
-<%- include("partials/footer.ejs") %>
