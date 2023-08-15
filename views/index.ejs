@@ -3,10 +3,18 @@
   <div class="todoList">
     <div class="list">
       <% if(locals.todoList) { %> <%todoList.forEach((todo)=> { %>
-      <div class="listItem">
-        <input type="checkbox" name="check" id="" class="checkBox" />
-        <p class="lineThrough"><%=todo %></p>
-      </div>
+      <form action="/delete" method="post">
+        <div class="listItem">
+          <input
+            type="checkbox"
+            name="checkedTodo"
+            class="checkBox"
+            value="<%=todo._id%>"
+            onchange="this.form.submit()"
+          />
+          <p class="lineThrough"><%=todo.name %></p>
+        </div>
+      </form>
       <%}) %> <% }%>
     </div>
 

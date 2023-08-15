@@ -4,8 +4,6 @@ import mongoose from "mongoose";
 
 const app = express();
 const port = 3000;
-let todoList = new Array();
-let todoList2 = new Array();
 
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -18,7 +16,14 @@ const todoSchema = {
 const Todo = mongoose.model("Todo", todoSchema);
 
 app.get("/", (req, res) => {
-  res.render("index.ejs");
+  Todo.find({})
+    .then(function (todoItems) {
+      res.render("index.ejs", { todoList: todoItems.reverse() });
+      // mongoose.connection.close();
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
 });
 
 app.post("/submit", (req, res) => {
@@ -27,20 +32,18 @@ app.post("/submit", (req, res) => {
       name: req.body["todo"],
     });
 
-    Todo.insertMany([item])
-      .then(function () {
-        mongoose.connection.close();
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-
-    const todo_item = item.name;
-    todoList.push(todo_item);
-    todoList2 = todoList.reverse();
+    item.save();
   }
+  res.redirect("/");
+});
 
-  res.render("index.ejs", { todoList: todoList2 });
+app.post("/delete", (req, res) => {
+  Todo.findByIdAndRemove(req.body.checkedTodo)
+    .then(function () {})
+    .catch(function (err) {
+      console.log(err);
+    });
+  res.redirect("/");
 });
 
 app.listen(port, () => {
