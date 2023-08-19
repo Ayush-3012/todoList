@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT;
 
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -48,6 +48,6 @@ app.post("/delete", (req, res) => {
   res.redirect("/");
 });
 
-app.listen(port, () => {
+app.listen(port || 3000, () => {
   console.log(`Listening on port ${port}.`);
 });
