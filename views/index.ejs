@@ -2,17 +2,18 @@
   <%- include("partials/header.ejs") %>
   <div class="todoList">
     <div class="list">
-      <% if(locals.todoList) { %> <%todoList.forEach((todo)=> { %>
+      <% if(locals.todoList) { %> <%todoList.forEach((todo)=> {%>
+
       <form action="/delete" method="post">
         <div class="listItem">
           <input
             type="checkbox"
             name="checkedTodo"
             class="checkBox"
-            value="<%=todo._id%>"
+            value="<%=todo?._id%>"
             onchange="this.form.submit()"
           />
-          <p class="lineThrough"><%=todo.name %></p>
+          <p class="lineThrough"><%=todo?.name%></p>
         </div>
       </form>
       <%}) %> <% }%>

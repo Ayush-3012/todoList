@@ -3,46 +3,66 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 
 const app = express();
-const port = 3000;
+const port = 3002;
 
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
-mongoose.connect(
-  "mongodb+srv://Ayush-3012:Champ%403012@cluster0.vjzwy0h.mongodb.net/todoListDB"
-);
+mongoose
+  .connect(
+    // "mongodb+srv://Ayush-3012:Champ%403012@cluster0.vjzwy0h.mongodb.net/todoListDB"
+    "mongodb://127.0.0.1:27017/todoListDB"
+  )
+  .then((res) =>
+    console.log(
+      "MongoDB Connected :",
+      res.connection.name,
+      "!! DB HOST : ",
+      res.connection.host
+    )
+  )
+  .catch((err) => console.log(err));
 
-const todoSchema = {
-  name: String,
-};
+// const todoSchema = {
+//   name: String,
+// };
+
+const todoSchema = mongoose.Schema({ name: String }, { timestamps: true });
 
 const Todo = mongoose.model("Todo", todoSchema);
 
 app.get("/", (req, res) => {
+  // Todo.find({})
+  //   .then(function (todoItems) {
+  //     res.render("index.ejs", { todoList: todoItems.reverse() });
+  //     // mongoose.connection.close();
+  //   })
+  //   .catch(function (err) {
+  //     console.log(err);
+  //   });
   Todo.find({})
-    .then(function (todoItems) {
+    .then((todoItems) => {
       res.render("index.ejs", { todoList: todoItems.reverse() });
-      // mongoose.connection.close();
     })
-    .catch(function (err) {
-      console.log(err);
-    });
+    .catch((err) => console.log(err));
 });
 
 app.post("/submit", (req, res) => {
-  if (req.body["todo"] != "") {
-    const item = new Todo({
-      name: req.body["todo"],
-    });
+  const { todo } = req.body;
+  if (!todo) return res.status(402).json("Todo not recieved");
 
-    item.save();
-  }
+  const item = new Todo({
+    name: todo,
+  });
+
+  item.save();
+
   res.redirect("/");
 });
 
 app.post("/delete", (req, res) => {
   Todo.findByIdAndRemove(req.body.checkedTodo)
-    .then(function () {})
-    .catch(function (err) {
+    .then(() => {})
+    .catch((err) => {
       console.log(err);
     });
   res.redirect("/");
